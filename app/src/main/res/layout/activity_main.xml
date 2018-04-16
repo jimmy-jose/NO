@@ -5,18 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="app.jimmy.no.MainActivity">
-
-    <com.mikhaellopez.circularprogressbar.CircularProgressBar
-        android:id="@+id/circular_progress"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="300dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/add"           app:layout_constraintEnd_toEndOf="parent"
-        app:cpb_background_progressbar_color="#B2CEF5"
-        app:cpb_background_progressbar_width="5dp"
-        app:cpb_progressbar_color="#4E88DA"
-        app:cpb_progressbar_width="10dp"/>
+        android:progressBackgroundTint="#E7E8EA"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/circular" />
     <TextView
         android:id="@+id/progress_text"
         android:layout_width="wrap_content"
@@ -29,7 +29,6 @@
         android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/circular_progress"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
