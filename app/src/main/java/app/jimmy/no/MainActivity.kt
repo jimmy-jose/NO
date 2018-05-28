@@ -23,14 +23,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         add.setOnClickListener(this)
-//        progressText = findViewById(R.id.progress_text)
-//        levelChange = findViewById(R.id.level_change_text)
-////        plus1 = findViewById(R.id.add)
-//        animationView = findViewById(R.id.animation_view)
-//        plus1!!.setOnClickListener(this)
-//        circularProgressBar!!.setOnClickListener(this)
     }
-
 
     override fun onClick(v: View) {
         when (v.id) {
@@ -44,40 +37,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 total += coefficient
                 if (total >= 100.0f) {
                     animation.start()
-//                    progressText!!.text = "100 %"
-//                    circularProgressBar!!.setProgressWithAnimation(100f)
-//                    animationView!!.visibility = View.VISIBLE
-//                    animationView!!.playAnimation()
-//                    plus1!!.visibility = View.GONE
-//                    levelChange!!.visibility = View.VISIBLE
-//                    animationView!!.addAnimatorListener(object : Animator.AnimatorListener {
-//                        override fun onAnimationStart(animation: Animator) {
-//
-//                        }
-//
-//                        override fun onAnimationEnd(animation: Animator) {
-//                            animationView!!.visibility = View.GONE
-//                            plus1!!.visibility = View.VISIBLE
-//                            levelChange!!.visibility = View.GONE
-//                        }
-//
-//                        override fun onAnimationCancel(animation: Animator) {
-//                            animationView!!.visibility = View.GONE
-//                            plus1!!.visibility = View.VISIBLE
-//                            levelChange!!.visibility = View.GONE
-//                        }
-//
-//                        override fun onAnimationRepeat(animation: Animator) {
-//
-//                        }
-//                    })
                     total = 0f
                     divideBy *= 2
                     coefficient = 100 / divideBy
-                } else {
-//                    progressText!!.text = total.toString() + " %"
-//                    circularProgressBar!!.setProgressWithAnimation(total)
-
+                }else{
+                    animation.start()
                 }
             }
         }
