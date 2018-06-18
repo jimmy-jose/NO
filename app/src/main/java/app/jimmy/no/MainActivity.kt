@@ -1,23 +1,27 @@
 package app.jimmy.no
 
-import android.animation.Animator
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 
-import com.airbnb.lottie.LottieAnimationView
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.animation.DecelerateInterpolator
 import android.animation.ObjectAnimator
-
+import android.util.Log
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
+    private val TAG = this@MainActivity.javaClass.simpleName
+
     private val level = 0
     private var divideBy = 1f
     private var coefficient = 100 / divideBy
-    private var total = 0f
+    private var total = 100f
+
+    val db : DocumentReference = FirebaseFirestore.getInstance().collection("UserStats").document("gob8G17dqF6wsFvEqat5")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +32,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         when (v.id) {
             R.id.add -> {
-                val animation = ObjectAnimator.ofInt(progressBar, "progress", 0, 100) // see this max value coming back here, we animate towards that value
+                val animation = ObjectAnimator.ofInt(progressBar, "progress", 0, Math.round(total)) // see this max value coming back here, we animate towards that value
                 animation.duration = 3000 // in milliseconds
                 animation.interpolator = DecelerateInterpolator()
                 if (total == 0f) {
@@ -43,6 +47,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }else{
                     animation.start()
                 }
+                progress_text.text = total.toString()
+                val dataToSave = HashMap<String,Float>()
+                dataToSave.put("totalVal",total)
+                db.set(dataToSave as Map<String, Any>).addOnSuccessListener { Log.d(TAG,"updated fb firestore") }.addOnFailureListener { Log.d(TAG,"Failed fb firestore update") }
+
             }
         }
     }
