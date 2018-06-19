@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import android.view.animation.DecelerateInterpolator
 import android.animation.ObjectAnimator
 import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View) {
+        FirebaseAuth.getInstance().signOut()
         when (v.id) {
             R.id.add -> {
                 val animation = ObjectAnimator.ofInt(progressBar, "progress", 0, Math.round(total)) // see this max value coming back here, we animate towards that value

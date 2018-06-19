@@ -10,14 +10,13 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.concurrent.TimeUnit
 
 
 class LoginActivity: AppCompatActivity(),View.OnClickListener {
+
     private val db :FirebaseFirestore= FirebaseFirestore.getInstance()
     private val TAG = this@LoginActivity.javaClass.simpleName
     private val mAuth = FirebaseAuth.getInstance()
@@ -27,6 +26,12 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
             Log.d(TAG,"onVerificationCompleted"+p0)
             val intent = Intent(this@LoginActivity,MainActivity::class.java)
             signInWithCredentials(p0)
+            Log.d(TAG,mAuth.currentUser.toString())
+            mAuth.addAuthStateListener {
+                if(mAuth.currentUser!=null) {
+                    checkUser(it.currentUser!!.uid)
+                }
+            }
         }
 
         override fun onVerificationFailed(p0: FirebaseException?) {
@@ -83,12 +88,28 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
                         callbacks)
             }
             R.id.verify->{
+                Log.d(TAG,"verification id: "+ mVerificationId)
                 val credential = PhoneAuthProvider.getCredential(mVerificationId,otp.text.toString())
-                val user = db.collection("Users")
-                if(user.document("surld81PadBAuQcSLMxi").get().result.exists()){
-                    Toast.makeText(this,"Hello",Toast.LENGTH_LONG).show()
-                }
                 signInWithCredentials(credential)
+                checkUser(mAuth.currentUser!!.uid)
+            }
+        }
+    }
+
+    fun checkUser(uId : String){
+        val user = db.collection("Users")
+        user.document(uId).get().addOnSuccessListener {
+            if(it.exists()) {
+                Toast.makeText(this, "Hello", Toast.LENGTH_LONG).show()
+            }else{
+                var data = HashMap<String,Any>()
+                data.put("phoneNumber",phone.text.toString())
+                data.put("name","Test")
+                val newUserRef = user.document(uId)
+                newUserRef.set(data).addOnSuccessListener {
+                    Log.d(TAG,"FireStore updated")
+                }
+                Toast.makeText(this, "World", Toast.LENGTH_LONG).show()
             }
         }
     }
