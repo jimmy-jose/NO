@@ -29,11 +29,20 @@
     <Button
         android:id="@+id/add"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="52dp"
+        android:text="update!"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="I said NO!"/>
+        app:layout_constraintEnd_toStartOf="@+id/logout"
+        app:layout_constraintStart_toStartOf="parent" />
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        android:text="logout!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/add"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <TextView
         android:id="@+id/level_change_text"
         android:visibility="gone"
@@ -44,5 +53,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
 
 </android.support.constraint.ConstraintLayout>

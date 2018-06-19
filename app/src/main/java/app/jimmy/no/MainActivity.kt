@@ -7,6 +7,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.animation.DecelerateInterpolator
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
@@ -16,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private val TAG = this@MainActivity.javaClass.simpleName
-
+    private val mAuth = FirebaseAuth.getInstance()
     private val level = 0
     private var divideBy = 1f
     private var coefficient = 100 / divideBy
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         add.setOnClickListener(this)
+        logout.setOnClickListener(this)
     }
 
     override fun onClick(v: View) {
@@ -54,6 +56,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 dataToSave.put("totalVal",total)
                 db.set(dataToSave as Map<String, Any>).addOnSuccessListener { Log.d(TAG,"updated fb firestore") }.addOnFailureListener { Log.d(TAG,"Failed fb firestore update") }
 
+            }
+            R.id.logout -> {
+                mAuth.signOut()
+                val intent=Intent(this@MainActivity,LoginActivity::class.java)
+                startActivity(intent)
+                finish()
             }
         }
     }

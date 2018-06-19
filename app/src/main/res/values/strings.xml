@@ -4,4 +4,5 @@
     <string name="otp">OTP</string>
     <string name="sent_otp">Sent Otp</string>
     <string name="verify_otp">Verify Otp</string>
+    <string name="default_country_code">+91</string>
 </resources>

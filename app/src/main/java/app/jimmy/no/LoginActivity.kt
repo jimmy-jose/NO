@@ -24,7 +24,6 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
     private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
         override fun onVerificationCompleted(p0: PhoneAuthCredential) {
             Log.d(TAG,"onVerificationCompleted"+p0)
-            val intent = Intent(this@LoginActivity,MainActivity::class.java)
             signInWithCredentials(p0)
             Log.d(TAG,mAuth.currentUser.toString())
             mAuth.addAuthStateListener {
@@ -79,19 +78,29 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
     override fun onClick(v: View) {
         when(v.id){
             R.id.sentOtp->{
-                PhoneAuthProvider.getInstance().
-                        verifyPhoneNumber(
-                        phone.text.toString(),       // Phone number to verify
-                        0,                                     // Timeout duration
-                        TimeUnit.SECONDS,                       // Unit of timeout
-                        this,                                   // Activity (for callback binding)
-                        callbacks)
+                val phone="+91"+phone.text.toString()
+                if(phone.length!=10){
+                    Log.e(TAG,"Wrong phone number!")
+                    Toast.makeText(this,"Please enter a valid phone number",Toast.LENGTH_LONG).show()
+                }else {
+                    PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                            phone,                                  // Phone number to verify
+                            60,                                     // Timeout duration
+                            TimeUnit.SECONDS,                       // Unit of timeout
+                            this,                                   // Activity (for callback binding)
+                            callbacks)
+                }
             }
-            R.id.verify->{
-                Log.d(TAG,"verification id: "+ mVerificationId)
-                val credential = PhoneAuthProvider.getCredential(mVerificationId,otp.text.toString())
-                signInWithCredentials(credential)
-                checkUser(mAuth.currentUser!!.uid)
+            R.id.verify-> {
+                val otp = otp.text.toString();
+                if (!mVerificationId.isEmpty() && !otp.isEmpty()){
+                    Log.d(TAG, "verification id: " + mVerificationId)
+                    val credential = PhoneAuthProvider.getCredential(mVerificationId, otp)
+                    signInWithCredentials(credential)
+                    checkUser(mAuth.currentUser!!.uid)
+                }else{
+                    Toast.makeText(this,"please enter valid otp",Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -100,17 +109,20 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
         val user = db.collection("Users")
         user.document(uId).get().addOnSuccessListener {
             if(it.exists()) {
-                Toast.makeText(this, "Hello", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Welcome back!!", Toast.LENGTH_LONG).show()
             }else{
-                var data = HashMap<String,Any>()
+                val data = HashMap<String,Any>()
                 data.put("phoneNumber",phone.text.toString())
                 data.put("name","Test")
                 val newUserRef = user.document(uId)
                 newUserRef.set(data).addOnSuccessListener {
+                    Toast.makeText(this, "Welcome!!", Toast.LENGTH_LONG).show()
                     Log.d(TAG,"FireStore updated")
                 }
-                Toast.makeText(this, "World", Toast.LENGTH_LONG).show()
             }
+            val intent = Intent(this@LoginActivity,MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 }
