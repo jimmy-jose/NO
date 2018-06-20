@@ -43,12 +43,10 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
         override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken?) {
             Log.d(TAG,"onCodeSent")
             mVerificationId = p0
-            progressBar.visibility=View.GONE
             moveToOtp()
         }
 
         override fun onCodeAutoRetrievalTimeOut(p0: String?) {
-            progressBar.visibility=View.GONE
             moveToOtp()
             Log.d(TAG,"onCodeAutoRetrievalTimeOut")
             Log.d(TAG,"onCodeSent")
@@ -82,6 +80,14 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
             }
         })
     }
+
+    override fun onBackPressed() {
+        if(otp_card_view.visibility==View.VISIBLE){
+            backToPhoneNumber()
+        }else{
+            super.onBackPressed()
+        }
+    }
     override fun onClick(v: View) {
         when(v.id){
             R.id.sentOtp->{
@@ -112,6 +118,7 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
     }
 
     private fun moveToOtp(){
+        progressBar.visibility=View.GONE
         TransitionManager.beginDelayedTransition(root)
         phone_card_view.visibility = View.GONE
         otp_card_view.visibility = View.VISIBLE
@@ -134,22 +141,23 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
     }
 
     private fun backToPhoneNumber() {
+        TransitionManager.beginDelayedTransition(root)
         phone_card_view.visibility = View.VISIBLE
         otp_card_view.visibility = View.GONE
     }
 
     fun checkUser(uId : String){
-        val user = db.collection("Users")
+        val user = db.collection(Constants.Keys.USERS)
         user.document(uId).get().addOnSuccessListener {
             if(it.exists()) {
-                Toast.makeText(this, "Welcome back!!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.welcome_back), Toast.LENGTH_LONG).show()
             }else{
                 val data = HashMap<String,Any>()
-                data.put("phoneNumber",phone_num.editText?.text.toString())
-                data.put("name","Test")
+                data.put(Constants.Keys.PHONE_NUMBER,phone_num.editText?.text.toString())
+                data.put(Constants.Keys.NAME,"Test")
                 val newUserRef = user.document(uId)
                 newUserRef.set(data).addOnSuccessListener {
-                    Toast.makeText(this, "Welcome!!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.welcome), Toast.LENGTH_LONG).show()
                     Log.d(TAG,"FireStore updated")
                 }
             }
