@@ -23,8 +23,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var coefficient = 100 / divideBy
     private var total = 100f
 
-    val db : DocumentReference = FirebaseFirestore.getInstance().collection("UserStats").document("gob8G17dqF6wsFvEqat5")
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,7 +31,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View) {
-        FirebaseAuth.getInstance().signOut()
         when (v.id) {
             R.id.add -> {
                 val animation = ObjectAnimator.ofInt(progressBar, "progress", 0, Math.round(total)) // see this max value coming back here, we animate towards that value
@@ -54,7 +51,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 progress_text.text = total.toString()
                 val dataToSave = HashMap<String,Float>()
                 dataToSave.put("totalVal",total)
-                db.set(dataToSave as Map<String, Any>).addOnSuccessListener { Log.d(TAG,"updated fb firestore") }.addOnFailureListener { Log.d(TAG,"Failed fb firestore update") }
 
             }
             R.id.logout -> {
