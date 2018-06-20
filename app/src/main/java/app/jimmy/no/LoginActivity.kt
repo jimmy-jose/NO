@@ -2,6 +2,7 @@ package app.jimmy.no
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.transition.TransitionManager
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
@@ -29,22 +30,26 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
             mAuth.addAuthStateListener {
                 if(mAuth.currentUser!=null) {
                     checkUser(it.currentUser!!.uid)
+                    progressBar.visibility=View.GONE
                 }
             }
         }
 
         override fun onVerificationFailed(p0: FirebaseException?) {
             Log.d(TAG,"onVerificationFailed"+p0)
-
+            progressBar.visibility=View.GONE
         }
 
         override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken?) {
             Log.d(TAG,"onCodeSent")
             mVerificationId = p0
-
+            progressBar.visibility=View.GONE
+            moveToOtp()
         }
 
         override fun onCodeAutoRetrievalTimeOut(p0: String?) {
+            progressBar.visibility=View.GONE
+            moveToOtp()
             Log.d(TAG,"onCodeAutoRetrievalTimeOut")
             Log.d(TAG,"onCodeSent")
         }
@@ -55,6 +60,8 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
         setContentView(R.layout.activity_login)
         sentOtp.setOnClickListener(this)
         verify.setOnClickListener(this)
+        back.setOnClickListener(this)
+        resent.setOnClickListener(this)
     }
 
     fun signInWithCredentials(credential: PhoneAuthCredential){
@@ -78,31 +85,57 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
     override fun onClick(v: View) {
         when(v.id){
             R.id.sentOtp->{
-                val phone="+91"+phone.text.toString()
-                if(phone.length!=10){
-                    Log.e(TAG,"Wrong phone number!")
-                    Toast.makeText(this,"Please enter a valid phone number",Toast.LENGTH_LONG).show()
-                }else {
-                    PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                            phone,                                  // Phone number to verify
-                            60,                                     // Timeout duration
-                            TimeUnit.SECONDS,                       // Unit of timeout
-                            this,                                   // Activity (for callback binding)
-                            callbacks)
-                }
+                sentMessage()
             }
             R.id.verify-> {
-                val otp = otp.text.toString();
+                val otp = code.editText?.text.toString();
                 if (!mVerificationId.isEmpty() && !otp.isEmpty()){
                     Log.d(TAG, "verification id: " + mVerificationId)
                     val credential = PhoneAuthProvider.getCredential(mVerificationId, otp)
                     signInWithCredentials(credential)
-                    checkUser(mAuth.currentUser!!.uid)
+                    mAuth.addAuthStateListener {
+                        if(mAuth.currentUser!=null) {
+                            checkUser(it.currentUser!!.uid)
+                        }
+                    }
                 }else{
                     Toast.makeText(this,"please enter valid otp",Toast.LENGTH_SHORT).show()
                 }
             }
+            R.id.back->{
+                backToPhoneNumber()
+            }
+            R.id.resent->{
+                sentMessage()
+            }
         }
+    }
+
+    private fun moveToOtp(){
+        TransitionManager.beginDelayedTransition(root)
+        phone_card_view.visibility = View.GONE
+        otp_card_view.visibility = View.VISIBLE
+    }
+
+    private fun sentMessage() {
+        val phone="+91"+ phone_num.editText?.text
+        if(phone.length!=13){
+            Log.e(TAG,"Wrong phone number!")
+            Toast.makeText(this,"Please enter a valid phone number",Toast.LENGTH_LONG).show()
+        }else {
+            progressBar.visibility=View.VISIBLE
+            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                    phone,                                  // Phone number to verify
+                    60,                                     // Timeout duration
+                    TimeUnit.SECONDS,                       // Unit of timeout
+                    this,                                   // Activity (for callback binding)
+                    callbacks)
+        }
+    }
+
+    private fun backToPhoneNumber() {
+        phone_card_view.visibility = View.VISIBLE
+        otp_card_view.visibility = View.GONE
     }
 
     fun checkUser(uId : String){
@@ -112,7 +145,7 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
                 Toast.makeText(this, "Welcome back!!", Toast.LENGTH_LONG).show()
             }else{
                 val data = HashMap<String,Any>()
-                data.put("phoneNumber",phone.text.toString())
+                data.put("phoneNumber",phone_num.editText?.text.toString())
                 data.put("name","Test")
                 val newUserRef = user.document(uId)
                 newUserRef.set(data).addOnSuccessListener {
@@ -123,6 +156,7 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
             val intent = Intent(this@LoginActivity,MainActivity::class.java)
             startActivity(intent)
             finish()
+            progressBar.visibility=View.GONE
         }
     }
 }

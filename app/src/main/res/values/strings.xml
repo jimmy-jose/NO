@@ -3,6 +3,9 @@
     <string name="phone">Phone</string>
     <string name="otp">OTP</string>
     <string name="sent_otp">Sent Otp</string>
-    <string name="verify_otp">Verify Otp</string>
+    <string name="verify_otp">Enter</string>
     <string name="default_country_code">+91</string>
+    <string name="logo">Logo</string>
+    <string name="back">Go Back</string>
+    <string name="resent_sms">Resent SMS</string>
 </resources>

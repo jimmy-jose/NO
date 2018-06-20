@@ -1,64 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    android:id="@+id/root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/country_code"
-        android:layout_width="25dp"
-        android:layout_height="22dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/default_country_code"
-        app:layout_constraintBottom_toBottomOf="@+id/phone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/phone" />
-
-    <EditText
-        android:id="@+id/phone"
-        android:hint="@string/phone"
-        android:layout_width="250dp"
+    android:layout_height="match_parent"
+    android:background="#f7f7f7">
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintStart_toEndOf="@+id/country_code"
+        android:elevation="5dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/otp"
-        android:inputType="phone" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
 
-    <EditText
-        android:id="@+id/otp"
-        android:layout_height="wrap_content"
-        android:layout_width="250dp"
-        android:layout_marginTop="10dp"
-        android:hint="@string/otp"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="@+id/phone"
-        app:layout_constraintStart_toStartOf="@+id/phone"
-        app:layout_constraintTop_toBottomOf="@+id/phone" />
-
-    <Button
-        android:id="@+id/sentOtp"
+    <android.support.v7.widget.CardView
+        android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/sent_otp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/verify"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/verify"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/verify_otp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/sentOtp" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher_foreground"
+        android:contentDescription="@string/logo" />
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/phone_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_gravity="center"
+        app:cardCornerRadius="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        android:layout_marginTop="50dp"
+        android:visibility="visible">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/phone_num"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="50dp"
+            android:hint="@string/phone">
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone" />
+        </android.support.design.widget.TextInputLayout>
+        <Button
+            android:id="@+id/sentOtp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/verify_otp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textColor="#ffffff"
+            app:layout_constraintTop_toBottomOf="@+id/phone_num"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/rounded_button_bg"/>
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/otp_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_gravity="center"
+        app:cardCornerRadius="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        android:layout_marginTop="50dp"
+        android:visibility="gone">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/verify"
+                android:hint="@string/otp">
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone" />
+            </android.support.design.widget.TextInputLayout>
+            <Button
+                android:id="@+id/verify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/verify_otp"
+                android:textColor="#ffffff"
+                app:layout_constraintTop_toBottomOf="@+id/code"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_button_bg"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/verify"
+                app:layout_constraintBottom_toBottomOf="parent">
+                <TextView
+                    android:id="@+id/back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:text="@string/back"
+                    android:padding="8dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginStart="16dp"/>
+                <TextView
+                    android:id="@+id/resent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:text="@string/resent_sms"
+                    android:padding="16dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginEnd="16dp"/>
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>
