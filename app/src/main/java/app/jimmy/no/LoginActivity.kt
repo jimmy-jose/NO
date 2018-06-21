@@ -65,6 +65,7 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
     fun signInWithCredentials(credential: PhoneAuthCredential){
         mAuth.signInWithCredential(credential).addOnCompleteListener(this, object : OnCompleteListener<AuthResult>{
             override fun onComplete(p0: Task<AuthResult>) {
+                progressBar.visibility = View.GONE
                 if (p0.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
@@ -94,7 +95,8 @@ class LoginActivity: AppCompatActivity(),View.OnClickListener {
                 sentMessage()
             }
             R.id.verify-> {
-                val otp = code.editText?.text.toString();
+                val otp = code.editText?.text.toString()
+                progressBar.visibility = View.GONE
                 if (!mVerificationId.isEmpty() && !otp.isEmpty()){
                     Log.d(TAG, "verification id: " + mVerificationId)
                     val credential = PhoneAuthProvider.getCredential(mVerificationId, otp)
