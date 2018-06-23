@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         animation = ObjectAnimator.ofInt(progressBar, "progress", Math.round(total)) // see this max value coming back here, we animate towards that value
         animation.duration = 500 // in milliseconds
         animation.interpolator = DecelerateInterpolator()
-        progress_text.text = total.toString()
+        progress_text.text = (Math.round(total)).toString()
         animation.start()
         animation.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     total=0f
                     progressBar.setProgress(0)
                     progress_text.text = "0"
+                    level_text.text = level.toString()
                 }
                 animation?.removeAllListeners()
             }
@@ -75,7 +76,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onAnimationStart(animation: Animator?) {
-                progress_text.text = total.toString()
+                progress_text.text = (Math.round(total)).toString()
+
             }
         })
     }

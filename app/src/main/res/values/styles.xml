@@ -13,4 +13,11 @@
         <item name="android:windowBackground">@drawable/splash</item>
     </style>
 
+    <style name="TextViewStyle">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:letterSpacing">.25</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
 </resources>
